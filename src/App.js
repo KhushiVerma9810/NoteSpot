@@ -2,6 +2,8 @@ import './App.css';
 import { Navbar } from './components/Navbar';
  import { About } from './components/About';
  import Home from './components/Home';
+ import { Login } from './components/Login';
+import { SignUp } from './components/SignUp';
 // Set up a router
 import {
   BrowserRouter,
@@ -25,12 +27,12 @@ function App() {
             <Route exact path="/about"  element={<About/>} >
             
             </Route>
-            {/* <Route exact path="/login"  element={<Login />} >
+            <Route exact path="/login"  element={<Login />} >
             
             </Route>
             <Route exact path="/signup"  element={<SignUp />} >
             
-            </Route> */}
+            </Route>
           </Routes>
           </div>
           {/* </AlertProvider> */}
