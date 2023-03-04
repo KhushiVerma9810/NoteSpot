@@ -4,6 +4,7 @@ import { Navbar } from './components/Navbar';
  import Home from './components/Home';
  import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
+import NoteState from './components/context/notes/NoteState';
 // Set up a router
 import {
   BrowserRouter,
@@ -15,6 +16,7 @@ function App() {
   
   return (
     <>
+     <NoteState>
    <BrowserRouter>
     <Navbar/>
     <div class="mt-20">
@@ -38,6 +40,7 @@ function App() {
           {/* </AlertProvider> */}
           </div>
     </BrowserRouter>
+    </NoteState>
     </>
   );
 }

@@ -6,19 +6,30 @@ const NoteState =(props) =>{
 const notesInitial = []
 const[notes , setNotes] = useState(notesInitial)
 //Get all Notes
-const getNotes = async()=>{
-const response = await fetch(`${host}/api/notes/fetchallnotes`, {
-  method: 'GET', // *GET, POST, PUT, DELETE, etc.
-  headers: {
-    'Content-Type': 'application/json',
-    "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjNlZjRjNjVhYzFhYjc5Y2VhNWY0Nzg3In0sImlhdCI6MTY3NjY1MDAyNn0.5vK1lybIfPSjQtDj2T4u_NQ_8GxHNMSBA5cvDQe0qz4"
-    // 'Content-Type': 'application/x-www-form-urlencoded',
-  }
-});
+const getNotes = async () => {
+    try {
+      const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQwMjNiNGQ3OTBjNWE0ZGUyNzljYzg2In0sImlhdCI6MTY3NzkyNjIwOH0.a5cVP8ReVWnHc-IwlEWirvFuL0QK16ZVCVIrNZ9SsS0',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch notes');
+      }
+      const notes = await response.json();
+      return notes;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+  
  // parses JSON response into native JavaScript objects
-const json = await response.json()
-setNotes(json)
-}
+// const json = await response.json()
+// setNotes(json)
+// }
 //Add a note
 const addNote = async(title , description , tag)=>{
     ///TODO : API call
