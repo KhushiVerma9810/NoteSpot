@@ -3,8 +3,8 @@ import noteContext from './context/notes/noteContext';
 import { useContext  , useState} from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { AlertContext } from '../context/AlertContext';
-// import Alert from './Alert';
+import { AlertContext } from './context/AlertContext';
+import Alert from './Alert';
 export const Addnote = () => {
     const context = useContext(noteContext);
     const {addNote} = context;
@@ -12,31 +12,31 @@ export const Addnote = () => {
 
     const [note, setNote] = useState({title:"" , description:"" , tag:""})
     
-    // const navigate = useNavigate()
-    // const { showAlert } = useContext(AlertContext)
+    const navigate = useNavigate()
+    const { showAlert } = useContext(AlertContext)
 
     // useEffect(() => {
     //     if (localStorage.getItem('token')) {
     //         console.log("yoooo")
     //     } else {
     //         navigate('/login')
-            // showAlert("You need to signed in first", "error")
-        // }
-        // eslint-disable-next-line
+    //         showAlert("You need to signed in first", "error")
+    //     }
+    //   //  eslint-disable-next-line
     // }, [])
 
     const handleclick = (e)=>{
         e.preventDefault();
         addNote(note.title , note.description , note.tag);
         setNote({title:"" , description:"" , tag:""})
-        // showAlert("Added Successfully", "success")
+        showAlert("Added Successfully", "success")
     }
    const onChange = (e)=>{
     setNote({...note , [e.target.name]: e.target.value})
    }
   return (
     <div>
-     {/* < Alert alert={alert}/> */}
+     < Alert alert={alert}/>
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>

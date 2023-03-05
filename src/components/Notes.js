@@ -4,72 +4,52 @@ import noteContext from './context/notes/noteContext';
 import NoteItem from './NoteItem';
 import { Addnote } from './Addnote';
 import { useNavigate } from 'react-router-dom';
-// import { AlertContext } from '../context/AlertContext';
-// import Alert from './Alert';
+import { AlertContext } from './context/AlertContext';
 
-export const Notes = () => {
-    const context = useContext(noteContext);
-    const { notes, getNotes, editnote } = context;
-    useEffect(() => {
-        getNotes()
-        // eslint-disable-next-line
-    }, [])
-    const ref = useRef(null)
-    const refClose = useRef(null)
-    const [note, setNote] = useState({id: "", etitle: "", edescription: "", etag: ""})
 
-    const updateNote = (currentNote) => {
-        ref.current.click();
-        setNote({id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etag:currentNote.tag})
+
+export const Notes = (props) => {
+  const context = useContext(noteContext);
+  const { notes, getNotes, editnote } = context;
+  const navigate = useNavigate()
+  const { showAlert } = useContext(AlertContext)
+
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      getNotes();
+      console.log(notes)
+    } else {
+      navigate("/login");
+      showAlert("You need to signed in first", "error")
     }
+    // eslint-disable-next-line
+  }, [])
+  const ref = useRef(null);
+  const refClose = useRef(null)
+  const [note, setNote] = useState({ id: "", etitle: "", edescription: "", etag: "" });
 
-    const handleclick = (e)=>{ 
-        editnote(note.id, note.etitle, note.edescription, note.etag)
-        refClose.current.click();
-    }
+  const updateNote = (currentNote) => {
 
-    const onChange = (e)=>{
-        setNote({...note, [e.target.name]: e.target.value})
-    }
-//   const { showAlert } = useContext(AlertContext)
-  
+    ref.current.click();
+    setNote({ id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag });
+  };
 
-//   useEffect(() => {
-//       if (localStorage.getItem('token')) {
-//           getNotes()
-//           console.log(notes)
-//       } else {
-//           navigate('/about')
-        //   showAlert("You need to signed in first", "error")
-    //   }
-      // eslint-disable-next-line
-//   }, [])
-//   const ref = useRef(null);
-//   const refClose = useRef(null)
-//   const [note, setNote] = useState({ id: "", etitle: "", edescription: "", etag: "" })
+  const handleclick = (e) => {
+    console.log("Updating the note...", note);
+    editnote(note.id, note.etitle, note.edescription, note.etag)
+    refClose.current.click();
+    showAlert("Updated Successfully", "success")
+  }
 
-//   const updateNote = (currentNote) => {
-//     if (ref.current && typeof ref.current.click === 'function') {
-//       ref.current.click();
-//     }
-//     setNote({ id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag })
-//   }
-
-//   const handleclick = (e) => {
-//     console.log("Updating the note...", note);
-//     editnote(note.id, note.etitle, note.edescription, note.etag)
-//     refClose.current.click();
-    // showAlert("Updated Successfully", "success")
-//   }
-
-//   const onChange = (e) => {
-//     setNote({ ...note, [e.target.name]: e.target.value })
-//   }
+  const onChange = (e) => {
+    setNote({ ...note, [e.target.name]: e.target.value })
+  }
 
   return (
     <>
       <Addnote />
-    
+
       {/* <!-- Modal toggle --> */}
 
       {/* <!-- Modal toggle --> */}
@@ -152,7 +132,7 @@ export const Notes = () => {
                 disabled={note.etitle.length < 5 || note.edescription.length < 5}
                 ref={refClose}
                 onClick={handleclick}>I accept</button>
-              <button data-modal-hide="staticModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Decline</button>
+              <button data-modal-hide="staticModal" type="button"  ref={refClose} class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Decline</button>
             </div>
           </div>
         </div>
@@ -160,11 +140,15 @@ export const Notes = () => {
 
       <div className=" mx-6 my-3 py-5 px-5">
         <h2>your notes</h2>
-        {notes.length === 0 && 'No notes to display'}
-        {notes.map((note) => {
-          return <NoteItem key={note._id} updateNote={updateNote} note={note} />
-        })}
+        {Array.isArray(notes) && notes.length > 0 ? (
+          notes.map((note) => {
+            return <NoteItem key={note._id} updateNote={updateNote} note={note} />;
+          })
+        ) : (
+          <p>No notes to display</p>
+        )}
       </div>
     </>
   )
 }
+export default Notes

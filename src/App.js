@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar';
  import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
 import NoteState from './components/context/notes/NoteState';
+import { AlertProvider } from './components/context/AlertContext';
 // Set up a router
 import {
   BrowserRouter,
@@ -20,7 +21,7 @@ function App() {
    <BrowserRouter>
     <Navbar/>
     <div class="mt-20">
-    {/* <AlertProvider> */}
+    <AlertProvider>
     <div className="container">
       <Routes>
       <Route  exact path="/" element = {<Home />}>
@@ -37,7 +38,7 @@ function App() {
             </Route>
           </Routes>
           </div>
-          {/* </AlertProvider> */}
+          </AlertProvider>
           </div>
     </BrowserRouter>
     </NoteState>
